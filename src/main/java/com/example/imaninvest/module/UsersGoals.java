@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class Users_goals {
+public class UsersGoals {
     private Integer id;
     private Integer user_id;
     private Integer goal_id;

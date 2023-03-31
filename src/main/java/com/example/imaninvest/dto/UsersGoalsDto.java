@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @Getter
 @Setter
-public class Users_goalsDto {
+public class UsersGoalsDto {
     private Integer id;
     private Integer user_id;
     private Integer goal_id;

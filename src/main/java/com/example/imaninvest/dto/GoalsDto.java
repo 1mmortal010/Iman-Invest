@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GoalsDto {
-    private Integer Id;
+    private Integer id;
     private String text;
 }

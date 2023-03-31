@@ -8,6 +8,6 @@ import java.beans.IntrospectionException;
 @Setter
 
 public class Goals {
-    private Integer Id;
+    private Integer id;
     private String text;
 }

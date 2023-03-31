@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GoalsDTO {
-    private Integer id;
+public class GoalsDto {
+    private Integer Id;
     private String text;
 }

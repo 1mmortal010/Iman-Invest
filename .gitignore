@@ -10,3 +10,4 @@
 pom.xml
 .mvn
 .idea
+./target

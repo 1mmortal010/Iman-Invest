@@ -4,6 +4,7 @@ import com.example.imaninvest.dto.AccountDto;
 import com.example.imaninvest.dto.GoalsDto;
 import com.example.imaninvest.dto.ResponseDto;
 import com.example.imaninvest.dto.UsersGoalsDto;
+import com.example.imaninvest.mapper.UserGoalsMapper;
 import com.example.imaninvest.module.Account;
 import com.example.imaninvest.module.UsersGoals;
 import org.springframework.stereotype.Service;
@@ -18,32 +19,16 @@ public class UsersGoalsService {
     private GoalsService goalsService;
     private UserService userService;
     private List<UsersGoals> usersGoalsList;
+
+    private UserGoalsMapper userGoalsMapper;
     private Integer index;
 
-    public UsersGoalsService(GoalsService goalsService, UserService userService) {
+    public UsersGoalsService(GoalsService goalsService, UserService userService, UserGoalsMapper userGoalsMapper) {
         this.goalsService = goalsService;
         this.userService = userService;
+        this.userGoalsMapper = userGoalsMapper;
         this.usersGoalsList = new ArrayList<>();
         this.index = 0;
-    }
-
-    private UsersGoals toEntity(UsersGoalsDto usersGoalsDto) {
-        UsersGoals usersGoals = new UsersGoals();
-        usersGoals.setGoal_id(usersGoalsDto.getGoal_id());
-        usersGoals.setUser_id(usersGoals.getUser_id());
-        usersGoals.setCreated_at(usersGoalsDto.getCreated_at());
-        usersGoals.setUpdated_at(usersGoalsDto.getUpdated_at());
-        return usersGoals;
-    }
-
-    private UsersGoalsDto toDto(UsersGoals usersGoals) {
-        UsersGoalsDto usersGoalsDto = new UsersGoalsDto();
-        usersGoalsDto.setId(usersGoals.getId());
-        usersGoalsDto.setGoal_id(usersGoals.getGoal_id());
-        usersGoalsDto.setUser_id(usersGoals.getUser_id());
-        usersGoalsDto.setCreated_at(usersGoals.getCreated_at());
-        usersGoalsDto.setUpdated_at(usersGoals.getUpdated_at());
-        return usersGoalsDto;
     }
 
     public ResponseDto<UsersGoalsDto> create(UsersGoalsDto usersGoalsDto) {
@@ -61,7 +46,7 @@ public class UsersGoalsService {
                     .build();
         }
 
-        UsersGoals usersGoals = toEntity(usersGoalsDto);
+        UsersGoals usersGoals = userGoalsMapper.toEntity(usersGoalsDto);
         usersGoals.setId(++this.index);
         usersGoals.setCreated_at(LocalDateTime.now());
         this.usersGoalsList.add(usersGoals);
@@ -79,7 +64,7 @@ public class UsersGoalsService {
                         .message("Account was found")
                         .success(true)
                         .code(0)
-                        .date(toDto(usersGoals))
+                        .date(userGoalsMapper.toDto(usersGoals))
                         .build();
             }
         }
@@ -107,7 +92,7 @@ public class UsersGoalsService {
 
         for (UsersGoals usersGoals : this.usersGoalsList) {
             if (usersGoals.getId().equals(id)) {
-                usersGoals = toEntity(usersGoalsDto);
+                usersGoals = userGoalsMapper.toEntity(usersGoalsDto);
                 usersGoals.setUpdated_at(LocalDateTime.now());
                 return ResponseDto.<UsersGoalsDto>builder()
                         .message("Account was updated")

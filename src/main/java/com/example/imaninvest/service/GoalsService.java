@@ -3,6 +3,7 @@ package com.example.imaninvest.service;
 import com.example.imaninvest.dto.CurrencyDto;
 import com.example.imaninvest.dto.GoalsDto;
 import com.example.imaninvest.dto.ResponseDto;
+import com.example.imaninvest.mapper.GoalsMapper;
 import com.example.imaninvest.module.Currency;
 import com.example.imaninvest.module.Goals;
 import org.springframework.stereotype.Service;
@@ -17,26 +18,18 @@ public class GoalsService {
     private List<Goals> goalsList;
     private Integer index;
 
-    public GoalsService(){
+    private GoalsMapper goalsMapper;
+
+    public GoalsService(GoalsMapper goalsMapper){
+        this.goalsMapper = goalsMapper;
         this.goalsList = new ArrayList<>();
         this.index = 0;
     }
     //turning the Goals into GoalsDto
-    public GoalsDto toDto(Goals goals) {
-        GoalsDto goalsDto = new GoalsDto();
-        goalsDto.setId(goals.getId());
-        goalsDto.setText(goals.getText());
-        return goalsDto;
-    }
-    //turning the GoalsDto into Goals
-    public Goals toEntity(GoalsDto goalsDto) {
-        Goals goals = new Goals();
-        goals.setText(goalsDto.getText());
-        return goals;
-    }
+
 
     public ResponseDto<GoalsDto> create(GoalsDto goalsDto) {
-        Goals goals = toEntity(goalsDto);
+        Goals goals = goalsMapper.toEntity(goalsDto);
         goals.setId(++this.index);
         this.goalsList.add(goals);
         return ResponseDto.<GoalsDto>builder()
@@ -50,7 +43,7 @@ public class GoalsService {
     public ResponseDto<GoalsDto> get(Integer id) {
         for (Goals goals : this.goalsList) {
             if (goals.getId().equals(id)) {
-                GoalsDto goalsDto = toDto(goals);
+                GoalsDto goalsDto = goalsMapper.toDto(goals);
                 return ResponseDto.<GoalsDto>builder()
                         .message("Goals was found")
                         .success(true)
@@ -69,7 +62,7 @@ public class GoalsService {
     public ResponseDto<GoalsDto> update(GoalsDto goalsDto, Integer id) {
         for (Goals goals : this.goalsList) {
             if (goals.getId().equals(id)) {
-                goals = toEntity(goalsDto);
+                goals = goalsMapper.toEntity(goalsDto);
                 this.goalsList.add(goals);
                 return ResponseDto.<GoalsDto>builder()
                         .message("Goals was updated")
@@ -113,7 +106,7 @@ public class GoalsService {
         }
         List<GoalsDto> goalsDtoList = this.goalsList
                 .stream()
-                .map(this::toDto)
+                .map(this.goalsMapper::toDto)
                 .toList();
         return ResponseDto.<List<GoalsDto>>builder()
                 .message("Ok")
@@ -130,7 +123,7 @@ public class GoalsService {
                         .message("ok")
                         .code(0)
                         .success(true)
-                        .date(toDto(goals))
+                        .date(goalsMapper.toDto(goals))
                         .build();
             }
         }

@@ -47,7 +47,7 @@ public class UsersGoalsService {
     }
 
     public ResponseDto<UsersGoalsDto> create(UsersGoalsDto usersGoalsDto) {
-        if (this.goalsService.getGoals(usersGoalsDto.getUser_id()).getDate() == null) {
+        if (this.goalsService.getGoals(usersGoalsDto.getGoal_id()).getDate() == null) {
             return ResponseDto.<UsersGoalsDto>builder()
                     .code(-1)
                     .message("User not found!")

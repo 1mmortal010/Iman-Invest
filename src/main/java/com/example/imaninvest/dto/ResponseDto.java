@@ -11,7 +11,7 @@ public class ResponseDto<T> {
 
     private  boolean success;
 
-    private String massage;
+    private String message;
 
     private  int code;
     /*
